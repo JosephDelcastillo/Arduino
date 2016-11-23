@@ -67,11 +67,11 @@ void loop() {
           // We've gone through all the menus. Because there's no way to
           // end the loop, we instead update the "finished" flag to stop
           // the loop from performing anything else. We also exit the
-          // function early to skip the rendering that happens later.
-          // TODO: do something with the results
+          // function early to skip anything that happens later.
+          // TODO: do something with the final results
           Serial.println("Finished");
           finished = true;
-          return;
+          return; // exit
         }
     }
     
