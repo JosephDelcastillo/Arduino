@@ -15,63 +15,91 @@ byte SecondMenuPage = 1;
 byte SecondMenuPageOld = 1;
 byte SecondMenuTotal = 4;
 
+byte State = 0;
+
 void setup()
 {
     lcd.begin(16,2);  //Initialize a 2x16 type LCD
-
+    
     MainMenuDisplay();
     delay(1000);
 }
 void loop()
 {
-    btn_push = ReadKeypad();
-    
-    MainMenuBtn();
-    
-    if(btn_push == 'S')//enter selected menu
-    {
-        WaitBtnRelease();
-        switch (mainMenuPage)
-        {
-            case 1:
-              None1();
-              break;
-            case 2:
-              Left1();
-              break;
-            case 3:
-              Middle1();
-              break;
-            case 4:
-              Right1();
-              break;
-        }
-
-          MainMenuDisplay();
-          WaitBtnRelease();
-
-        switch (secondMenuPage)
-        {
-            case 1:
-              None2();
-              break;
-            case 2:
-              Left2();
-              break;
-            case 3:
-              Middle2();
-              break;
-            case 4:
-              Right2();
-              break;
-        }  
-    }
-    
-
-
-    delay(10);
+  if(State == 0){
+    Main();
+  }
+  else if(State == 1){
+    Second();
+  }
+  else{
+    lcd.setCursor(0,0);
+    lcd.print("Error State" +State);
+  }
+  
+  delay(10);
   
 }//--------------- End of loop() loop ---------------------
+void Main(){
+  btn_push = ReadKeypad();
+
+  MainMenuBtn();
+
+  if(btn_push == 'S')//enter selected menu
+  {
+    WaitBtnRelease();
+    switch (mainMenuPage)
+    {
+        case 1:
+          None1();
+          break;
+        case 2:
+          Left1();
+          break;
+        case 3:
+          Middle1();
+          break;
+        case 4:
+          Right1();
+          break;
+    }
+    
+    MainMenuDisplay();
+    WaitBtnRelease();
+  }
+}
+void Second(){
+  
+  btn_push = ReadKeypad();
+
+  SecondMenuBtn();
+
+  if(btn_push == 'S')//enter selected menu
+  {
+    WaitBtnRelease();
+    switch (SecondMenuPage)
+    {
+      case 1:
+        None2();
+        break;
+      case 2:
+        Left2();
+        break;
+      case 3:
+        Middle2();
+        break;
+      case 4:
+        Right2();
+        break;
+    }
+    
+    MainMenuDisplay();
+    WaitBtnRelease();
+  }
+  
+}
+
+
 void None1()
 {  
     lcd.clear();
@@ -81,7 +109,8 @@ void None1()
     while(ReadKeypad()!= 'L')
     {
         //Insert Task for None here
-       delay(1000);
+       State = 1;
+       delay(2500);
        SecondMenuDisplay();
     }
 }
@@ -109,7 +138,8 @@ void Left1()
     while(ReadKeypad()!= 'L')
     {
         //Insert Task for Left here
-       delay(1000);
+       State = 1;
+       delay(2500);
        SecondMenuDisplay();
     }
 }
@@ -137,7 +167,8 @@ void Middle1()
     while(ReadKeypad()!= 'L')
     {
         //Insert Task for Middle here
-       delay(1000);
+       State = 1;
+       delay(2500);
        SecondMenuDisplay();
     }
 }
@@ -165,7 +196,8 @@ void Right1()
     while(ReadKeypad()!= 'L')
     {
         //Insert Task for Right here
-       delay(1000);
+       State = 1;
+       delay(2500);
        SecondMenuDisplay();
     }
 }
@@ -214,7 +246,7 @@ void SecondMenuDisplay()
     lcd.setCursor(0,0);
     lcd.print("Select Fin Pos");
     lcd.setCursor(0,1);
-    switch (secondMenuPage)
+    switch (SecondMenuPage)
     {
         case 1:
           lcd.print("None");
@@ -252,6 +284,7 @@ void MainMenuBtn()
         MainMenuDisplay();
         mainMenuPageOld = mainMenuPage;
     }
+    
 }
 
 void SecondMenuBtn()
@@ -259,21 +292,21 @@ void SecondMenuBtn()
     WaitBtnRelease();
     if(btn_push == 'U')
     {
-        secondMenuPage++;
-        if(secondMenuPage > secondMenuTotal)
-          secondMenuPage = 1;
+        SecondMenuPage++;
+        if(SecondMenuPage > SecondMenuTotal)
+          SecondMenuPage = 1;
     }
     else if(btn_push == 'D')
     {
-        secondMenuPage--;
-        if(secondMenuPage == 0)
-          secondMenuPage = secondMenuTotal;    
+        SecondMenuPage--;
+        if(SecondMenuPage == 0)
+          SecondMenuPage = SecondMenuTotal;    
     }
     
-    if(secondMenuPage != secondMenuPageOld) //only update display when page change
+    if(SecondMenuPage != SecondMenuPageOld) //only update display when page change
     {
         SecondMenuDisplay();
-        secondMenuPageOld = secondMenuPage;
+        SecondMenuPageOld = SecondMenuPage;
     }
     
 }
